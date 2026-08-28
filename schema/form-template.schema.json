@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://taxform.example.com/schema/form-template.schema.json",
+  "title": "Form Template",
+  "description": "A form template describes the fields (boxes) of a printed tax form: their geometry, page, and placement rules. It is written once per form and tax-year version and contains no data references. See docs/spec.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["specVersion", "kind", "form", "pageSize", "pages"],
+  "properties": {
+    "specVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Version of the specification this document conforms to."
+    },
+    "kind": {
+      "const": "form-template"
+    },
+    "form": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "taxYear", "version"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "description": "Stable identifier of the form, e.g. \"f1040\"."
+        },
+        "name": { "type": "string" },
+        "taxYear": { "type": "integer", "minimum": 1900 },
+        "version": {
+          "type": "string",
+          "description": "Version of this template, e.g. \"2025-1\". Annotations reference this value."
+        },
+        "officialAcroForm": {
+          "type": "string",
+          "format": "uri",
+          "description": "Optional URL of the official fillable PDF this template was measured from."
+        }
+      }
+    },
+    "pageSize": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["width", "height"],
+      "description": "Size of every page in PDF points (1/72 inch). US Letter = 612 x 792.",
+      "properties": {
+        "width": { "type": "number", "exclusiveMinimum": 0 },
+        "height": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "pages": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/page" }
+    }
+  },
+  "$defs": {
+    "page": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["index", "fields"],
+      "properties": {
+        "index": { "type": "integer", "minimum": 0 },
+        "label": { "type": "string" },
+        "fields": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/field" }
+        }
+      }
+    },
+    "field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "rect", "placement"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-zA-Z0-9]*(\\.[a-z][a-zA-Z0-9]*)*$",
+          "description": "Dotted, lowercase field identifier, unique within the template. Annotations reference this id."
+        },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "acroField": {
+          "type": "string",
+          "description": "Optional cross-reference to the field name in the official fillable PDF."
+        },
+        "rect": { "$ref": "#/$defs/rect" },
+        "placement": { "$ref": "#/$defs/placement" }
+      }
+    },
+    "rect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y", "width", "height"],
+      "description": "Box geometry: x/y are the top-left corner in PDF points, measured from the page's top-left corner.",
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "width": { "type": "number", "exclusiveMinimum": 0 },
+        "height": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "placement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hAlign", "vAlign", "fontSize", "overflow"],
+      "description": "Rules the renderer uses to place and fit a value inside the field's rect.",
+      "properties": {
+        "hAlign": { "enum": ["left", "center", "right"] },
+        "vAlign": { "enum": ["top", "middle", "bottom"] },
+        "fontFamily": {
+          "enum": ["helvetica", "courier", "times"],
+          "default": "helvetica"
+        },
+        "fontSize": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["mode", "size"],
+              "properties": {
+                "mode": { "const": "fixed" },
+                "size": { "type": "number", "exclusiveMinimum": 0 }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["mode", "min", "max"],
+              "properties": {
+                "mode": { "const": "autofit" },
+                "min": { "type": "number", "exclusiveMinimum": 0 },
+                "max": { "type": "number", "exclusiveMinimum": 0 }
+              }
+            }
+          ]
+        },
+        "overflow": {
+          "enum": ["truncate", "error"],
+          "description": "truncate: clip the value so it fits the box. error: fail the fill if the value does not fit."
+        },
+        "multiLine": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the value may wrap onto multiple lines inside the box."
+        }
+      }
+    }
+  }
+}

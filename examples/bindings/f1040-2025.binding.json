@@ -1,0 +1,605 @@
+{
+  "specVersion": "1.3.0",
+  "kind": "binding",
+  "form": {
+    "id": "f1040",
+    "taxYear": 2025,
+    "version": "2025-1"
+  },
+  "dataSource": {
+    "name": "tax-engine",
+    "dataFormat": "application/json",
+    "version": "1.0.0"
+  },
+  "fields": [
+    {
+      "fieldRef": "tp.nameFirst",
+      "jsonPath": "$.taxpayer.name.first",
+      "formatter": {
+        "type": "text",
+        "params": {
+          "case": "title"
+        }
+      },
+      "required": true
+    },
+    {
+      "fieldRef": "tp.nameLast",
+      "jsonPath": "$.taxpayer.name.last",
+      "formatter": {
+        "type": "text",
+        "params": {
+          "case": "title"
+        }
+      },
+      "required": true
+    },
+    {
+      "fieldRef": "tp.ssn",
+      "jsonPath": "$.taxpayer.ssn",
+      "formatter": {
+        "type": "ssn"
+      },
+      "required": true
+    },
+    {
+      "fieldRef": "sp.nameFirst",
+      "jsonPath": "$.spouse.name.first",
+      "formatter": {
+        "type": "text",
+        "params": {
+          "case": "title"
+        }
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "sp.nameLast",
+      "jsonPath": "$.spouse.name.last",
+      "formatter": {
+        "type": "text",
+        "params": {
+          "case": "title"
+        }
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "sp.ssn",
+      "jsonPath": "$.spouse.ssn",
+      "formatter": {
+        "type": "ssn"
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "addr.street",
+      "jsonPath": "$.address.street",
+      "formatter": {
+        "type": "text",
+        "params": {
+          "case": "title"
+        }
+      },
+      "required": true
+    },
+    {
+      "fieldRef": "addr.apt",
+      "jsonPath": "$.address.apt",
+      "formatter": {
+        "type": "text"
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "addr.city",
+      "jsonPath": "$.address.city",
+      "formatter": {
+        "type": "text",
+        "params": {
+          "case": "title"
+        }
+      },
+      "required": true
+    },
+    {
+      "fieldRef": "addr.state",
+      "jsonPath": "$.address.state",
+      "formatter": {
+        "type": "text",
+        "params": {
+          "case": "upper"
+        }
+      },
+      "required": true
+    },
+    {
+      "fieldRef": "addr.zip",
+      "jsonPath": "$.address.zip",
+      "formatter": {
+        "type": "text"
+      },
+      "required": true
+    },
+    {
+      "fieldRef": "fs.single",
+      "jsonPath": "$.filingStatus",
+      "formatter": {
+        "type": "checkbox",
+        "params": {
+          "checkedValue": "Single"
+        }
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "fs.mfj",
+      "jsonPath": "$.filingStatus",
+      "formatter": {
+        "type": "checkbox",
+        "params": {
+          "checkedValue": "MFJ"
+        }
+      },
+      "required": true
+    },
+    {
+      "fieldRef": "fs.mfs",
+      "jsonPath": "$.filingStatus",
+      "formatter": {
+        "type": "checkbox",
+        "params": {
+          "checkedValue": "MFS"
+        }
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "fs.hoh",
+      "jsonPath": "$.filingStatus",
+      "formatter": {
+        "type": "checkbox",
+        "params": {
+          "checkedValue": "HOH"
+        }
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "fs.qss",
+      "jsonPath": "$.filingStatus",
+      "formatter": {
+        "type": "checkbox",
+        "params": {
+          "checkedValue": "QSS"
+        }
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "l1a.wagesAmt",
+      "jsonPath": "$.taxpayer.w2s[0].box1Wages",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": true
+    },
+    {
+      "fieldRef": "l1b.otherWagesAmt",
+      "jsonPath": "$.income.householdEmployeeWages",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "l1c.tipAmt",
+      "jsonPath": "$.income.tipIncome",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "l1d.medicaidWaiverAmt",
+      "jsonPath": "$.income.medicaidWaiverPayments",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "l1e.dependentCareAmt",
+      "jsonPath": "$.income.dependentCareBenefits",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "l1f.adoptionBenefitsAmt",
+      "jsonPath": "$.income.adoptionBenefits",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "l1g.f8919WagesAmt",
+      "jsonPath": "$.income.form8919Wages",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "l1h.otherEarnedIncomeAmt",
+      "jsonPath": "$.income.otherEarnedIncome",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "l1i.combatPayAmt",
+      "jsonPath": "$.income.combatPay",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "l1z.totalIncomeAmt",
+      "jsonPath": "$.income.totalIncome",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": true,
+      "placement": {
+        "fontSize": {
+          "mode": "fixed",
+          "size": 10
+        }
+      }
+    },
+    {
+      "fieldRef": "l2a.taxExemptInterestAmt",
+      "jsonPath": "$.income.taxExemptInterest",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "l2b.taxableInterestAmt",
+      "jsonPath": "$.income.taxableInterest",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": false,
+      "annotation": {
+        "note": "Cross-check against Form 1099-INT before filing"
+      }
+    },
+    {
+      "fieldRef": "l3a.qualifiedDividendsAmt",
+      "jsonPath": "$.income.qualifiedDividends",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "l3b.ordinaryDividendsAmt",
+      "jsonPath": "$.income.ordinaryDividends",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "l4a.iraDistributionsAmt",
+      "jsonPath": "$.income.iraDistributions",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "l4b.iraTaxableAmt",
+      "jsonPath": "$.income.iraTaxable",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "l5a.pensionAmt",
+      "jsonPath": "$.income.pensionAnnuities",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "l5b.pensionTaxableAmt",
+      "jsonPath": "$.income.pensionTaxable",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "l6a.socialSecurityAmt",
+      "jsonPath": "$.income.socialSecurityBenefits",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "l6b.socialSecurityTaxableAmt",
+      "jsonPath": "$.income.socialSecurityTaxable",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "l7a.capitalGainAmt",
+      "jsonPath": "$.income.capitalGain",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": false,
+      "annotation": {
+        "mark": {
+          "text": "REVIEW",
+          "placement": {
+            "dx": 4,
+            "dy": 0
+          }
+        },
+        "highlight": true
+      }
+    },
+    {
+      "fieldRef": "l8.additionalIncomeAmt",
+      "jsonPath": "$.income.additionalIncome",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "l9.totalIncomeAmt",
+      "jsonPath": "$.income.totalIncome",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": true
+    },
+    {
+      "fieldRef": "l10.adjustmentsAmt",
+      "jsonPath": "$.adjustments.total",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": true
+    },
+    {
+      "fieldRef": "l11a.agiAmt",
+      "jsonPath": "$.income.agi",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": true
+    },
+    {
+      "fieldRef": "l11b.agiModifiedAmt",
+      "jsonPath": "$.income.agi",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "l12e.standardOrItemizedAmt",
+      "jsonPath": "$.deductions.standardOrItemized",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": true
+    },
+    {
+      "fieldRef": "l15.taxableIncomeAmt",
+      "jsonPath": "$.tax.taxableIncome",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": true
+    },
+    {
+      "fieldRef": "l16.taxAmt",
+      "jsonPath": "$.tax.amount",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": true
+    },
+    {
+      "fieldRef": "l24.totalTaxAmt",
+      "jsonPath": "$.tax.totalTax",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": true
+    },
+    {
+      "fieldRef": "l25a.withholdingW2Amt",
+      "jsonPath": "$.taxpayer.w2s[0].box2FederalWithholding",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": true
+    },
+    {
+      "fieldRef": "l25b.withholding1099Amt",
+      "jsonPath": "$.payments.withholding1099",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "l25c.withholdingOtherAmt",
+      "jsonPath": "$.payments.withholdingOther",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "l25d.withholdingTotalAmt",
+      "jsonPath": "$.payments.totalWithholding",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": true
+    },
+    {
+      "fieldRef": "l26.estimatedPaymentsAmt",
+      "jsonPath": "$.payments.estimatedPayments",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "l33.totalPaymentsAmt",
+      "jsonPath": "$.payments.totalPayments",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": true
+    },
+    {
+      "fieldRef": "l34.overpaidAmt",
+      "jsonPath": "$.refund.overpaid",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": true
+    },
+    {
+      "fieldRef": "l35a.refundAmt",
+      "jsonPath": "$.refund.amount",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": true
+    },
+    {
+      "fieldRef": "l35b.routingNumber",
+      "jsonPath": "$.refund.routingNumber",
+      "formatter": {
+        "type": "text"
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "l35c.accountTypeChecking",
+      "jsonPath": "$.refund.accountType",
+      "formatter": {
+        "type": "checkbox",
+        "params": {
+          "checkedValue": "checking"
+        }
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "l35c.accountTypeSavings",
+      "jsonPath": "$.refund.accountType",
+      "formatter": {
+        "type": "checkbox",
+        "params": {
+          "checkedValue": "savings"
+        }
+      },
+      "required": false
+    },
+    {
+      "fieldRef": "l35d.accountNumber",
+      "jsonPath": "$.refund.accountNumber",
+      "formatter": {
+        "type": "text"
+      },
+      "required": false,
+      "placement": {
+        "hAlign": "right"
+      }
+    },
+    {
+      "fieldRef": "l37.amountOwedAmt",
+      "jsonPath": "$.amountOwed",
+      "formatter": {
+        "type": "currency"
+      },
+      "required": true
+    },
+    {
+      "fieldRef": "sig.signature",
+      "jsonPath": "$.signature.name",
+      "formatter": {
+        "type": "text"
+      },
+      "required": true,
+      "placement": {
+        "dx": -2,
+        "dy": -1
+      }
+    },
+    {
+      "fieldRef": "sig.date",
+      "jsonPath": "$.signature.date",
+      "formatter": {
+        "type": "date"
+      },
+      "required": true
+    },
+    {
+      "fieldRef": "sig.occupation",
+      "jsonPath": "$.taxpayer.occupation",
+      "formatter": {
+        "type": "text",
+        "params": {
+          "case": "title"
+        }
+      },
+      "required": true
+    }
+  ],
+  "stamps": [
+    {
+      "text": "DRAFT \u2014 DO NOT FILE",
+      "page": 0,
+      "rect": {
+        "x": 450,
+        "y": 30,
+        "width": 110,
+        "height": 14
+      },
+      "placement": {
+        "hAlign": "center",
+        "vAlign": "middle",
+        "fontFamily": "helvetica",
+        "fontSize": {
+          "mode": "fixed",
+          "size": 10
+        },
+        "overflow": "truncate"
+      }
+    }
+  ]
+}

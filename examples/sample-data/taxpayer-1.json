@@ -1,0 +1,99 @@
+{
+  "taxYear": 2025,
+  "filingStatus": "MFJ",
+  "taxpayer": {
+    "name": {
+      "first": "alexandra",
+      "last": "rivera"
+    },
+    "ssn": "123456789",
+    "occupation": "software engineer",
+    "w2s": [
+      {
+        "employer": {
+          "name": "Acme Corporation",
+          "ein": "12-3456789"
+        },
+        "year": 2025,
+        "box1Wages": 123400.0,
+        "box2FederalWithholding": 15200.0
+      },
+      {
+        "employer": {
+          "name": "Beta Consulting LLC",
+          "ein": "98-7654321"
+        },
+        "year": 2025,
+        "box1Wages": 18500.0,
+        "box2FederalWithholding": 2100.0
+      }
+    ]
+  },
+  "spouse": {
+    "name": {
+      "first": "jordan",
+      "last": "rivera"
+    },
+    "ssn": "987654321"
+  },
+  "address": {
+    "street": "1234 maple avenue",
+    "apt": "5B",
+    "city": "springfield",
+    "state": "il",
+    "zip": "62704"
+  },
+  "income": {
+    "householdEmployeeWages": 0.0,
+    "tipIncome": 0.0,
+    "medicaidWaiverPayments": 0.0,
+    "dependentCareBenefits": 0.0,
+    "adoptionBenefits": 0.0,
+    "form8919Wages": 0.0,
+    "otherEarnedIncome": 0.0,
+    "combatPay": 0.0,
+    "taxExemptInterest": 500.0,
+    "taxableInterest": 1240.0,
+    "qualifiedDividends": 3200.0,
+    "ordinaryDividends": 3200.0,
+    "iraDistributions": 0.0,
+    "iraTaxable": 0.0,
+    "pensionAnnuities": 0.0,
+    "pensionTaxable": 0.0,
+    "socialSecurityBenefits": 0.0,
+    "socialSecurityTaxable": 0.0,
+    "capitalGain": 1500.0,
+    "totalIncome": 147840.0,
+    "agi": 147840.0
+  },
+  "adjustments": {
+    "total": 0.0
+  },
+  "deductions": {
+    "standardOrItemized": 31500.0
+  },
+  "tax": {
+    "taxableIncome": 116340.0,
+    "amount": 17712.0,
+    "totalTax": 17712.0
+  },
+  "payments": {
+    "withholding1099": 0.0,
+    "withholdingOther": 0.0,
+    "totalWithholding": 17300.0,
+    "estimatedPayments": 4000.0,
+    "totalPayments": 21300.0
+  },
+  "refund": {
+    "overpaid": 3588.0,
+    "amount": 3588.0,
+    "routingNumber": "071000013",
+    "accountNumber": "1234567890",
+    "accountType": "checking"
+  },
+  "amountOwed": 0.0,
+  "signature": {
+    "name": "Alexandra Rivera",
+    "date": "2026-03-15"
+  }
+}

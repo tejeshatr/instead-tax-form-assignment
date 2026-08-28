@@ -1,0 +1,305 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://taxform.example.com/schema/binding.schema.json",
+  "title": "Binding",
+  "description": "A binding — the fill instruction — wires template field ids to values in a data set: a JSONPath reference, an optional formatter, a required flag, optional relative placement, and optional true annotations (notes, marks, highlights) per entry, plus page-level stamps. It contains no absolute field geometry. See docs/spec.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["specVersion", "kind", "form", "fields"],
+  "properties": {
+    "specVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "kind": {
+      "const": "binding"
+    },
+    "form": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "taxYear", "version"],
+      "description": "Identifies the form template this binding applies to.",
+      "properties": {
+        "id": { "type": "string" },
+        "taxYear": { "type": "integer", "minimum": 1900 },
+        "version": { "type": "string" }
+      }
+    },
+    "dataSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "dataFormat"],
+      "description": "Optional provenance of the data this binding was written against.",
+      "properties": {
+        "name": { "type": "string" },
+        "dataFormat": { "type": "string" },
+        "version": { "type": "string" }
+      }
+    },
+    "fields": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/bindingEntry" }
+    },
+    "stamps": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/stamp" },
+      "description": "Optional page-level overlay text, e.g. \"DRAFT\" or \"AMENDED\"."
+    }
+  },
+  "$defs": {
+    "bindingEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fieldRef", "jsonPath"],
+      "properties": {
+        "fieldRef": {
+          "type": "string",
+          "description": "Id of a field in the form template. Existence is checked at parse time."
+        },
+        "jsonPath": {
+          "type": "string",
+          "pattern": "^\\$",
+          "description": "JSONPath reference into the data set. The full subset grammar is defined in docs/spec.md and enforced at resolution time."
+        },
+        "formatter": { "$ref": "#/$defs/formatter" },
+        "required": {
+          "type": "boolean",
+          "default": false,
+          "description": "If true, a missing value (no match, null, or blank string) is an error. If false, the field is left blank."
+        },
+        "placement": { "$ref": "#/$defs/relativePlacement" },
+        "annotation": {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "description": "Optional true annotation: something extra added on top of the field, beyond the data binding.",
+          "properties": {
+            "note": { "type": "string", "description": "Human comment attached to the field (tooling, not printed)." },
+            "mark": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["text"],
+              "description": "Short printed text drawn on top of the field, e.g. \"REVIEW\".",
+              "properties": {
+                "text": { "type": "string", "minLength": 1 },
+                "placement": { "$ref": "#/$defs/relativePlacement" }
+              }
+            },
+            "highlight": { "type": "boolean", "description": "Flags the field for reviewer attention." }
+          }
+        },
+        "description": { "type": "string" }
+      }
+    },
+    "relativePlacement": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "description": "Relative positioning: a dx/dy offset from the field's rect (points) plus selective overrides. Unspecified properties inherit the field's template placement.",
+      "properties": {
+        "dx": { "type": "number", "description": "Horizontal offset from the field's rect, in points (positive = right)." },
+        "dy": { "type": "number", "description": "Vertical offset from the field's rect, in points (positive = down)." },
+        "hAlign": { "enum": ["left", "center", "right"] },
+        "vAlign": { "enum": ["top", "middle", "bottom"] },
+        "fontFamily": { "enum": ["helvetica", "courier", "times"] },
+        "fontSize": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["mode", "size"],
+              "properties": {
+                "mode": { "const": "fixed" },
+                "size": { "type": "number", "exclusiveMinimum": 0 }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["mode", "min", "max"],
+              "properties": {
+                "mode": { "const": "autofit" },
+                "min": { "type": "number", "exclusiveMinimum": 0 },
+                "max": { "type": "number", "exclusiveMinimum": 0 }
+              }
+            }
+          ]
+        },
+        "overflow": { "enum": ["truncate", "error"] },
+        "multiLine": { "type": "boolean" }
+      }
+    },
+    "stamp": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text", "page", "rect", "placement"],
+      "description": "Page-level overlay text drawn in its own rect.",
+      "properties": {
+        "text": { "type": "string", "minLength": 1 },
+        "page": { "type": "integer", "minimum": 0 },
+        "rect": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["x", "y", "width", "height"],
+          "properties": {
+            "x": { "type": "number" },
+            "y": { "type": "number" },
+            "width": { "type": "number", "exclusiveMinimum": 0 },
+            "height": { "type": "number", "exclusiveMinimum": 0 }
+          }
+        },
+        "placement": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["hAlign", "vAlign", "fontSize", "overflow"],
+          "properties": {
+            "hAlign": { "enum": ["left", "center", "right"] },
+            "vAlign": { "enum": ["top", "middle", "bottom"] },
+            "fontFamily": { "enum": ["helvetica", "courier", "times"] },
+            "fontSize": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["mode", "size"],
+                  "properties": {
+                    "mode": { "const": "fixed" },
+                    "size": { "type": "number", "exclusiveMinimum": 0 }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["mode", "min", "max"],
+                  "properties": {
+                    "mode": { "const": "autofit" },
+                    "min": { "type": "number", "exclusiveMinimum": 0 },
+                    "max": { "type": "number", "exclusiveMinimum": 0 }
+                  }
+                }
+              ]
+            },
+            "overflow": { "enum": ["truncate", "error"] },
+            "multiLine": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "formatter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type"],
+      "description": "Declarative formatter applied to the resolved value. One of the built-in types, or a custom type prefixed with x- or custom-.",
+      "properties": {
+        "type": { "type": "string" },
+        "params": { "type": "object" }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "type": { "const": "text" },
+            "params": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "case": { "enum": ["preserve", "upper", "lower", "title"] },
+                "trim": { "type": "boolean" }
+              }
+            }
+          },
+          "required": ["type"]
+        },
+        {
+          "properties": {
+            "type": { "const": "number" },
+            "params": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "decimals": { "type": "integer", "minimum": 0, "maximum": 4 },
+                "grouping": { "type": "boolean" }
+              }
+            }
+          },
+          "required": ["type"]
+        },
+        {
+          "properties": {
+            "type": { "const": "currency" },
+            "params": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "symbol": { "type": "string" },
+                "decimals": { "type": "integer", "minimum": 0, "maximum": 4 },
+                "negativeParens": { "type": "boolean" }
+              }
+            }
+          },
+          "required": ["type"]
+        },
+        {
+          "properties": {
+            "type": { "const": "date" },
+            "params": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "inputFormat": { "type": "string" },
+                "outputFormat": { "type": "string" }
+              }
+            }
+          },
+          "required": ["type"]
+        },
+        {
+          "properties": {
+            "type": { "const": "ssn" },
+            "params": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "separator": { "type": "string" }
+              }
+            }
+          },
+          "required": ["type"]
+        },
+        {
+          "properties": {
+            "type": { "const": "checkbox" },
+            "params": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "checkedValue": {
+                  "type": ["string", "number", "boolean"],
+                  "description": "The mark is drawn when the resolved value equals this. Default: true."
+                },
+                "mark": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1
+                }
+              }
+            }
+          },
+          "required": ["type"]
+        },
+        {
+          "properties": {
+            "type": {
+              "type": "string",
+              "pattern": "^(x-|custom-)",
+              "description": "Custom formatter registered by the consumer."
+            },
+            "params": { "type": "object" }
+          },
+          "required": ["type"]
+        }
+      ]
+    }
+  }
+}

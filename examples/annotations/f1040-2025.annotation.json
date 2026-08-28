@@ -1,0 +1,36 @@
+{
+  "specVersion": "1.3.0",
+  "kind": "annotation",
+  "form": {
+    "id": "f1040",
+    "taxYear": 2025,
+    "version": "2025-1"
+  },
+  "annotations": [
+    {
+      "field_ref": "tp.nameFirst",
+      "positioning": "left",
+      "alignment": "middle",
+      "text": "Add your name here"
+    },
+    {
+      "field_ref": "l7a.capitalGainAmt",
+      "positioning": "right",
+      "alignment": "middle",
+      "text": "REVIEW",
+      "offset": 4
+    },
+    {
+      "field_ref": "l35b.routingNumber",
+      "positioning": "top",
+      "alignment": "center",
+      "text": "Direct deposit"
+    },
+    {
+      "field_ref": "sig.date",
+      "positioning": "bottom",
+      "alignment": "right",
+      "text": "MM/DD/YYYY"
+    }
+  ]
+}

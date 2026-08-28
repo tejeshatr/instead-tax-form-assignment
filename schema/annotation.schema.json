@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://taxform.example.com/schema/annotation.schema.json",
+  "title": "Annotation",
+  "description": "An annotation document adds presentation-only text on top of a form: each annotation is bound to a template field and positioned inside the field's box, relative to the field's own sides (top, bottom, left, right), for human readability. It contains no data references and no absolute geometry. See docs/spec.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["specVersion", "kind", "form", "annotations"],
+  "properties": {
+    "specVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "kind": {
+      "const": "annotation"
+    },
+    "form": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "taxYear", "version"],
+      "description": "Identifies the form template this annotation document applies to.",
+      "properties": {
+        "id": { "type": "string" },
+        "taxYear": { "type": "integer", "minimum": 1900 },
+        "version": { "type": "string" }
+      }
+    },
+    "annotations": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/annotation" }
+    }
+  },
+  "$defs": {
+    "annotation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["field_ref", "positioning", "alignment", "text"],
+      "description": "Presentation-only text bound to a field, positioned inside the field's box relative to one of its sides.",
+      "properties": {
+        "field_ref": {
+          "type": "string",
+          "description": "Id of a field in the form template. Existence is checked at parse time."
+        },
+        "positioning": {
+          "enum": ["left", "right", "top", "bottom"],
+          "description": "Which edge of the field's box the text hugs."
+        },
+        "alignment": {
+          "type": "string",
+          "description": "Where along that edge: top|middle|bottom for left/right sides; left|center|right for top/bottom sides."
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "offset": {
+          "type": "number",
+          "description": "Optional gap in points from the edge (default 0; positive = toward the edge)."
+        }
+      },
+      "if": {
+        "properties": { "positioning": { "enum": ["left", "right"] } },
+        "required": ["positioning"]
+      },
+      "then": {
+        "properties": { "alignment": { "enum": ["top", "middle", "bottom"] } }
+      },
+      "else": {
+        "properties": { "alignment": { "enum": ["left", "center", "right"] } }
+      }
+    }
+  }
+}
